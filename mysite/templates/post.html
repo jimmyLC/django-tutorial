@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trip</title>
+  <link href='http://fonts.googleapis.com/css?family=Lemon' rel='stylesheet' type='text/css'>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://djangogirlstaipei.github.io/assets/css/style.css" rel=stylesheet>
+</head>
+<body>
+  <div class="header">
+    <h1 class="site-title text-center">
+      <a href="/">My trip</a>
+    </h1>
+  </div>
+  <div class="container post post-detail">
+    <div class="post-heading">
+      <h1 class="title">
+        <a href="{% url 'post_detail' id=post.id %}">{{ post.title }}</a>
+      </h1>
+      <div class="date">
+        {{ post.created_at|date:'Y / m /d'}}</div>
+    </div>
+    <div class="location"></div>
+    <div id="map-canvas"></div>
+    <div class="post-content">
+      {{post.content}}
+    </div>
+    <hr class="fancy-line">
+    <img src="{{post.photo}}" alt="" class="photo">
+  </div>
+</body>
+</html>
