@@ -6,14 +6,14 @@ from django.contrib.auth.decorators import login_required
 from .forms import StoreForm
 from .models import Store
 
-@login_required
-@require_http_methods(['POST'])
-
 def store_create(request):
   if request.method == 'POST':
     form = StoreForm(data=request.POST, submit_title='create')
     if form.is_valid():
-      store = form.save()
+      store = form.save(commit=False)
+      if request.user.is_authenticated():
+        store.owner = request.user
+      store.save()
       return redirect(store.get_absolute_url())
   else:
       form = StoreForm(submit_title='create')
@@ -35,6 +35,8 @@ def store_update(request, pk):
     'form': form, 'store': store,
     })
 
+@login_required
+# @require_http_methods(['POST', 'DELETE'])
 def store_delete(request, pk):
   try:
     store = Store.objects.get(pk=pk)
@@ -42,6 +44,8 @@ def store_delete(request, pk):
     raise Http404
   if store.can_user_delete(request.user):
     store.delete()
+    if request.is_ajax:
+      return HttpResponse()
     return redirect('store_list')
   return HttpResponseForbidden()
 

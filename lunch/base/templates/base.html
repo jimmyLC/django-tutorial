@@ -1,9 +1,11 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title> {% block title %}午餐系統{% endblock title %} </title>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
 </head>
 <body>
 {% block body %}
@@ -20,6 +22,7 @@
       {% if user.is_authenticated %}
       {% csrf_token %}
         <input type="hidden" name="next" value="{% url 'home' %}">
+        <!-- 登入後跳轉至首頁 -->
         <button class="btn btn-default" type="submit" >登出</button>
         {% else %}
         <a class="btn btn-default" href="{% url 'login' %}">登入</a>
@@ -29,6 +32,10 @@
   </div>
 </nav>
 {% endblock body %}
+
+<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="{% static 'base/js/base.js' %}"></script>
+{% block js %}{% endblock js %}
 </body>
 </html>
 
