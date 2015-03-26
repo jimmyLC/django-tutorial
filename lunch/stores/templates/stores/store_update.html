@@ -1,0 +1,10 @@
+{% extends 'stores/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+店家列表 ｜ {{ block.super }}
+{% endblock title %}
+
+{% block content %}
+{% crispy form %}
+{% endblock content %}
