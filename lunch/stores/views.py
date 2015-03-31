@@ -5,6 +5,8 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from .forms import StoreForm
 from .models import Store
+from django.core.urlresolvers import reverse
+from events.forms import EventForm
 
 def store_create(request):
   if request.method == 'POST':
@@ -58,7 +60,9 @@ def store_detail(request, pk):
     store = Store.objects.get(pk=pk)
   except Store.DoesNotExist:
     raise Http404
-  return render(request, 'stores/store_detail.html', {'store': store})
+  event_form = EventForm(initial={'store': store}, submit_title='create_event')
+  event_form.helper.form_action = reverse('event_create')
+  return render(request, 'stores/store_detail.html', {'store': store, 'event_form': event_form,})
 
 
 

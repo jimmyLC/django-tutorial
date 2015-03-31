@@ -5,6 +5,7 @@ from .forms import EventForm
 class EventCreateView(CreateView):
   form_class = EventForm
   model = Event
+  http_method_names = ('post',)
 
 class EventDetailView(DetailView):
   model = Event
