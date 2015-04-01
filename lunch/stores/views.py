@@ -5,8 +5,12 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from .forms import StoreForm
 from .models import Store
+from .models import MenuItem
 from django.core.urlresolvers import reverse
 from events.forms import EventForm
+from django.forms.models import inlineformset_factory
+from .forms import MenuItemFormSet
+
 
 def store_create(request):
   if request.method == 'POST':
@@ -28,13 +32,18 @@ def store_update(request, pk):
     raise Http404
   if request.method == 'POST':
     form = StoreForm(data=request.POST, instance=store, submit_title='update')
-    if form.is_valid():
+    menu_item_formset = MenuItemFormSet(request.POST, instance=store)
+    if form.is_valid() and menu_item_formset.is_valid():
       store = form.save()
+      menu_item_formset.save()
       return redirect(store.get_absolute_url())
   else:
     form = StoreForm(instance=store, submit_title='update')
+    form.helper.form_tag = False
+    menu_item_formset = MenuItemFormSet(instance=store)
   return render(request, 'stores/store_update.html', {
     'form': form, 'store': store,
+    'menu_item_formset': menu_item_formset,
     })
 
 @login_required

@@ -1,10 +1,28 @@
 {% extends 'stores/base.html' %}
 {% load crispy_forms_tags %}
+{% load staticfiles %}
 
 {% block title %}
 店家列表 ｜ {{ block.super }}
 {% endblock title %}
 
 {% block content %}
-{% crispy form %}
+<form method="post">
+  {% crispy form %}
+
+  {{ menu_item_formset.management_form }}
+  {% for form in menu_item_formset %}
+  <div class="menu-item form-group">
+    {% crispy form menu_item_formset.helper %}
+  </div>
+  {% endfor %}
+
+  <a href="#" class="menu-item-add btn btn-default">新增菜單項目</a>
+  <button typr="submit" class="btn btn=primary" >更新</button>
+</form>
 {% endblock content %}
+
+{% block js %}
+{{ block.super }}
+<script src="{% static 'stores/js/store_update.js' %}"></script>
+{% endblock js %}

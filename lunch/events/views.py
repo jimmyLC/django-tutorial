@@ -14,8 +14,16 @@ class EventCreateView(LoginRequiredMixin, CreateView):
 class EventDetailView(LoginRequiredMixin, DetailView):
   model = Event
 
+  def get_order(self, user):
+    try:
+      order = Order.objects.get(user=user, event=self.get_object())
+    except:
+      order = None
+    return order
+
   def post(self, request, *args, **kwargs):
-    form = OrderForm(request.POST)
+    order = self.get_order(user=request.user)
+    form = OrderForm(request.POST, instance=order)
     if not form.is_valid():
       return HttpResponseBadRequest()
     order  = form.save(commit=False)
@@ -25,7 +33,11 @@ class EventDetailView(LoginRequiredMixin, DetailView):
 
   def get_context_data(self, **kwargs):
     data = super(EventDetailView, self).get_context_data(**kwargs)
-    order_form = OrderForm()
+    order = self.get_order(user=self.request.user)
+    order_form = OrderForm(instance=order)
     order_form.fields['item'].queryset = self.object.store.menu_items.all()
     data['order_form'] = order_form
     return data
+
+
+
