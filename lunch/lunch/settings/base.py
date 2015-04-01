@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     'pages',
     'stores',
     'base',
+    'braces',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',

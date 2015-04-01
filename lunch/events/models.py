@@ -16,7 +16,6 @@ class Order(models.Model):
   event = models.ForeignKey('Event', related_name='orders')
   user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders')
   item = models.ForeignKey('stores.MenuItem', related_name='orders')
-
   notes = models.TextField(blank=True, default='')
 
   class Meta:
